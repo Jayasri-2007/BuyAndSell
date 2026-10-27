@@ -1,0 +1,611 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Used Products Classified</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f2f4f7;
+    color: #222;
+}
+
+header {
+    background: #333;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+.container {
+    width: 90%;
+    max-width: 1100px;
+    margin: 25px auto;
+}
+
+.panel {
+    background: white;
+    padding: 22px;
+    border-radius: 10px;
+    margin-bottom: 22px;
+    box-shadow: 0 2px 6px #0002;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #bbb;
+    border-radius: 5px;
+    font: inherit;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 90px;
+}
+
+button {
+    padding: 11px 16px;
+    border: none;
+    border-radius: 5px;
+    background: green;
+    color: white;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+button:hover { background: darkgreen; }
+
+.secondary {
+    background: #555;
+}
+
+.secondary:hover { background: #333; }
+
+.full { grid-column: 1 / -1; }
+
+#productList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 18px;
+}
+
+.product-card {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px #0002;
+    overflow-wrap: anywhere;
+}
+
+.product-card img {
+    width: 100%;
+    height: 170px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.price {
+    color: green;
+    font-weight: bold;
+    font-size: 19px;
+}
+
+.notice {
+    background: #e4f7e8;
+    border-left: 5px solid green;
+    padding: 12px;
+    margin: 10px 0;
+    overflow-wrap: anywhere;
+}
+
+.order-notice {
+    background: #e8f0ff;
+    border-left-color: royalblue;
+}
+
+#checkoutPage, #successPage {
+    display: none;
+}
+
+.summary {
+    background: #f5f5f5;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 18px;
+}
+
+.summary img {
+    width: 150px;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+@media (max-width: 600px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .full { grid-column: auto; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Used Products Classified</h1>
+    <p>Buy and Sell Used Products</p>
+</header>
+
+<div class="container">
+
+    <!-- SELL PRODUCT PAGE -->
+    <section class="panel" id="sellPage">
+        <h2>Sell Your Product</h2>
+
+        <form id="productForm">
+            <div class="form-grid">
+
+                <div>
+                    <label for="productName">Product Name</label>
+                    <input id="productName" required
+                           placeholder="e.g. Dell Laptop">
+                </div>
+
+                <div>
+                    <label for="sellerName">Seller Name</label>
+                    <input id="sellerName" required
+                           placeholder="Enter seller name">
+                </div>
+
+                <div>
+                    <label for="price">Price (₹)</label>
+                    <input id="price" type="number"
+                           min="1" required placeholder="15000">
+                </div>
+
+                <div>
+                    <label for="category">Category</label>
+                    <select id="category" required>
+                        <option value="">Select Category</option>
+                        <option>Mobile</option>
+                        <option>Laptop</option>
+                        <option>Electronics</option>
+                        <option>Furniture</option>
+                        <option>Books</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+
+                <div class="full">
+                    <label for="productImage">Product Photo</label>
+                    <input id="productImage" type="file"
+                           accept="image/*" required>
+                </div>
+
+                <div class="full">
+                    <button type="submit">Sell Product</button>
+                </div>
+
+            </div>
+        </form>
+    </section>
+
+    <!-- NOTIFICATIONS -->
+    <section class="panel">
+        <h2>Notifications</h2>
+        <div id="notifications">
+            <p>No notifications yet.</p>
+        </div>
+    </section>
+
+    <!-- PRODUCT LIST -->
+    <section class="panel" id="productsPage">
+        <h2>Available Products</h2>
+        <div id="productList">
+            <p>No products listed yet.</p>
+        </div>
+    </section>
+
+    <!-- CHECKOUT PAGE -->
+    <section class="panel" id="checkoutPage">
+        <h2>Checkout - Enter Your Details</h2>
+
+        <div id="orderSummary" class="summary"></div>
+
+        <form id="checkoutForm">
+            <div class="form-grid">
+
+                <div>
+                    <label for="buyerName">Full Name</label>
+                    <input id="buyerName" required
+                           placeholder="Enter your full name">
+                </div>
+
+                <div>
+                    <label for="buyerPhone">Mobile Number</label>
+                    <input id="buyerPhone" type="tel"
+                           pattern="[0-9]{10}" maxlength="10"
+                           required placeholder="10-digit mobile number">
+                </div>
+
+                <div>
+                    <label for="buyerEmail">Email Address</label>
+                    <input id="buyerEmail" type="email"
+                           required placeholder="example@email.com">
+                </div>
+
+                <div>
+                    <label for="buyerCity">City</label>
+                    <input id="buyerCity" required
+                           placeholder="Enter your city">
+                </div>
+
+                <div class="full">
+                    <label for="buyerAddress">Delivery Address</label>
+                    <textarea id="buyerAddress" required
+                              placeholder="Door number, street, area"></textarea>
+                </div>
+
+                <div>
+                    <label for="buyerPincode">PIN Code</label>
+                    <input id="buyerPincode" inputmode="numeric"
+                           pattern="[0-9]{6}" maxlength="6"
+                           required placeholder="6-digit PIN code">
+                </div>
+
+                <div>
+                    <label for="paymentMethod">Payment Method</label>
+                    <select id="paymentMethod" required>
+                        <option value="">Select Payment Method</option>
+                        <option value="Cash on Delivery">Cash on Delivery</option>
+                        <option value="UPI (demo only)">UPI (demo only)</option>
+                    </select>
+                </div>
+
+                <div class="full">
+                    <button type="submit">Place Order</button>
+                    <button type="button" class="secondary"
+                            id="backButton">Back to Products</button>
+                </div>
+
+            </div>
+        </form>
+    </section>
+
+    <!-- ORDER SUCCESS PAGE -->
+    <section class="panel" id="successPage">
+        <h2>Order Placed Successfully!</h2>
+        <p id="successMessage"></p>
+        <p>Your order details have been added to this demo website.</p>
+        <button type="button" id="continueButton">
+            Continue Shopping
+        </button>
+    </section>
+
+    <!-- SELLER ORDERS -->
+    <section class="panel" id="sellerOrdersPage">
+        <h2>Orders Received (Seller)</h2>
+        <div id="ordersList">
+            <p>No orders received yet.</p>
+        </div>
+    </section>
+
+</div>
+
+<script>
+const productForm = document.getElementById("productForm");
+const checkoutForm = document.getElementById("checkoutForm");
+
+const productList = document.getElementById("productList");
+const notifications = document.getElementById("notifications");
+const ordersList = document.getElementById("ordersList");
+
+const sellPage = document.getElementById("sellPage");
+const productsPage = document.getElementById("productsPage");
+const checkoutPage = document.getElementById("checkoutPage");
+const successPage = document.getElementById("successPage");
+
+let products = [];
+let orders = [];
+let currentProductId = null;
+let nextProductId = 1;
+let nextOrderId = 1;
+
+function notify(message, isOrder = false) {
+    if (
+        notifications.children.length === 1 &&
+        notifications.children[0].tagName === "P"
+    ) {
+        notifications.innerHTML = "";
+    }
+
+    const item = document.createElement("div");
+    item.className = isOrder
+        ? "notice order-notice"
+        : "notice";
+
+    item.textContent =
+        new Date().toLocaleTimeString() + " - " + message;
+
+    notifications.prepend(item);
+}
+
+function showProductsPage() {
+    sellPage.style.display = "block";
+    productsPage.style.display = "block";
+    checkoutPage.style.display = "none";
+    successPage.style.display = "none";
+    document.getElementById("sellerOrdersPage").style.display = "block";
+}
+
+function renderProducts() {
+    productList.innerHTML = "";
+
+    if (products.length === 0) {
+        productList.innerHTML = "<p>No products listed yet.</p>";
+        return;
+    }
+
+    products.forEach(function(product) {
+        const card = document.createElement("article");
+        card.className = "product-card";
+
+        const img = document.createElement("img");
+        img.src = product.image;
+        img.alt = product.name;
+
+        const title = document.createElement("h3");
+        title.textContent = product.name;
+
+        const category = document.createElement("p");
+        category.textContent = "Category: " + product.category;
+
+        const price = document.createElement("p");
+        price.className = "price";
+        price.textContent =
+            "₹" + Number(product.price).toLocaleString("en-IN");
+
+        const seller = document.createElement("p");
+        seller.textContent = "Seller: " + product.seller;
+
+        const status = document.createElement("p");
+        status.textContent = product.sold
+            ? "Status: Order placed"
+            : "Status: Available";
+
+        card.append(img, title, category, price, seller, status);
+
+        if (!product.sold) {
+            const buyButton = document.createElement("button");
+            buyButton.type = "button";
+            buyButton.textContent = "Buy Now";
+
+            buyButton.addEventListener("click", function() {
+                openCheckout(product.id);
+            });
+
+            card.appendChild(buyButton);
+        }
+
+        productList.appendChild(card);
+    });
+}
+
+// Add a product and its image
+productForm.addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const name = document.getElementById("productName").value.trim();
+    const seller = document.getElementById("sellerName").value.trim();
+    const price = document.getElementById("price").value;
+    const category = document.getElementById("category").value;
+    const file = document.getElementById("productImage").files[0];
+
+    if (!name || !seller || !price || !category || !file) {
+        return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+        alert("Please select a valid image.");
+        return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = function() {
+        products.unshift({
+            id: nextProductId++,
+            name: name,
+            seller: seller,
+            price: price,
+            category: category,
+            image: reader.result,
+            sold: false
+        });
+
+        renderProducts();
+        productForm.reset();
+
+        notify("Product '" + name + "' listed successfully!");
+    };
+
+    reader.onerror = function() {
+        alert("Could not load the image. Please try another photo.");
+    };
+
+    reader.readAsDataURL(file);
+});
+
+// Open the checkout page instead of showing an alert
+function openCheckout(productId) {
+    const product = products.find(function(item) {
+        return item.id === productId;
+    });
+
+    if (!product || product.sold) return;
+
+    currentProductId = productId;
+
+    const summary = document.getElementById("orderSummary");
+    summary.innerHTML = "";
+
+    const image = document.createElement("img");
+    image.src = product.image;
+    image.alt = product.name;
+
+    const title = document.createElement("h3");
+    title.textContent = product.name;
+
+    const price = document.createElement("p");
+    price.className = "price";
+    price.textContent =
+        "Price: ₹" + Number(product.price).toLocaleString("en-IN");
+
+    const seller = document.createElement("p");
+    seller.textContent = "Seller: " + product.seller;
+
+    summary.append(image, title, price, seller);
+
+    sellPage.style.display = "none";
+    productsPage.style.display = "none";
+    document.getElementById("sellerOrdersPage").style.display = "none";
+    successPage.style.display = "none";
+    checkoutPage.style.display = "block";
+
+    checkoutForm.reset();
+    window.scrollTo(0, 0);
+}
+
+// Place the order using the buyer's submitted details
+checkoutForm.addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const product = products.find(function(item) {
+        return item.id === currentProductId;
+    });
+
+    if (!product || product.sold) {
+        alert("Sorry, this product is no longer available.");
+        showProductsPage();
+        return;
+    }
+
+    const buyer = {
+        name: document.getElementById("buyerName").value.trim(),
+        phone: document.getElementById("buyerPhone").value.trim(),
+        email: document.getElementById("buyerEmail").value.trim(),
+        city: document.getElementById("buyerCity").value.trim(),
+        address: document.getElementById("buyerAddress").value.trim(),
+        pincode: document.getElementById("buyerPincode").value.trim(),
+        payment: document.getElementById("paymentMethod").value
+    };
+
+    const order = {
+        id: nextOrderId++,
+        productName: product.name,
+        price: product.price,
+        seller: product.seller,
+        buyer: buyer,
+        time: new Date().toLocaleString()
+    };
+
+    orders.unshift(order);
+    product.sold = true;
+
+    // Buyer confirmation notification
+    notify(
+        "Order #" + order.id + " placed successfully for " +
+        product.name + ". Thank you, " + buyer.name + "!",
+        true
+    );
+
+    // Seller's new order notification
+    notify(
+        "New order #" + order.id + " for " + product.name +
+        ". Buyer: " + buyer.name +
+        ". Phone: " + buyer.phone +
+        ". Email: " + buyer.email,
+        true
+    );
+
+    renderOrders();
+    renderProducts();
+
+    checkoutPage.style.display = "none";
+    successPage.style.display = "block";
+
+    document.getElementById("successMessage").textContent =
+        "Order #" + order.id + " for " + product.name +
+        " has been placed. Total: ₹" +
+        Number(product.price).toLocaleString("en-IN") +
+        ". Payment method: " + buyer.payment + ".";
+
+    window.scrollTo(0, 0);
+});
+
+// Show order details to the seller
+function renderOrders() {
+    ordersList.innerHTML = "";
+
+    if (orders.length === 0) {
+        ordersList.innerHTML = "<p>No orders received yet.</p>";
+        return;
+    }
+
+    orders.forEach(function(order) {
+        const card = document.createElement("div");
+        card.className = "notice order-notice";
+
+        const heading = document.createElement("h3");
+        heading.textContent =
+            "Order #" + order.id + " - " + order.productName;
+
+        const details = document.createElement("p");
+        details.textContent =
+            "Price: ₹" + Number(order.price).toLocaleString("en-IN") +
+            " | Seller: " + order.seller +
+            " | Buyer: " + order.buyer.name +
+            " | Phone: " + order.buyer.phone +
+            " | Email: " + order.buyer.email +
+            " | Address: " + order.buyer.address +
+            ", " + order.buyer.city +
+            " - " + order.buyer.pincode +
+            " | Payment: " + order.buyer.payment +
+            " | Date: " + order.time;
+
+        card.append(heading, details);
+        ordersList.appendChild(card);
+    });
+}
+
+document.getElementById("backButton").addEventListener("click", function() {
+    showProductsPage();
+    window.scrollTo(0, 0);
+});
+
+document.getElementById("continueButton").addEventListener("click", function() {
+    showProductsPage();
+    window.scrollTo(0, 0);
+});
+</script>
+
+</body>
+</html>
