@@ -1,0 +1,1544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReVibe Market</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f5f5f5;
+    color: #333;
+}
+
+header {
+    background: #34245c;
+    color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+header h2 {
+    font-size: 25px;
+}
+
+header button {
+    background: white;
+    color: #34245c;
+}
+
+.container {
+    width: 92%;
+    max-width: 1100px;
+    margin: 25px auto;
+}
+
+.box {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px #ddd;
+}
+
+h2, h3 {
+    margin-bottom: 15px;
+    color: #34245c;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 11px;
+    margin: 8px 0 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 75px;
+}
+
+button {
+    border: none;
+    background: #6845a5;
+    color: white;
+    padding: 11px 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 4px 3px 4px 0;
+}
+
+button:hover {
+    opacity: 0.85;
+}
+
+.green {
+    background: #198754;
+}
+
+.red {
+    background: #dc3545;
+}
+
+.orange {
+    background: #e58a17;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.center {
+    text-align: center;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.product-card {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px #ddd;
+    min-width: 0;
+}
+
+.product-card img {
+    width: 100%;
+    height: 170px;
+    object-fit: contain;
+    background: #f7f7f7;
+    border-radius: 7px;
+}
+
+.product-card h3 {
+    margin-top: 12px;
+}
+
+.price {
+    color: #198754;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.status {
+    font-weight: bold;
+    color: #6845a5;
+}
+
+.small {
+    font-size: 14px;
+    color: #666;
+    margin: 7px 0;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 15px 0;
+}
+
+.checkout-product {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.checkout-product img {
+    width: 160px;
+    height: 130px;
+    object-fit: contain;
+    background: #f5f5f5;
+    border-radius: 8px;
+}
+
+.payment-option {
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 7px;
+    margin: 10px 0;
+}
+
+.payment-option label {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.payment-option input {
+    width: auto;
+    margin-right: 8px;
+}
+
+.back-btn {
+    background: #555;
+}
+
+.total {
+    font-size: 22px;
+    font-weight: bold;
+    color: #198754;
+    margin: 15px 0;
+}
+
+@media(max-width: 750px) {
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width: 480px) {
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+
+    header {
+        justify-content: center;
+        text-align: center;
+    }
+
+    .checkout-product img {
+        width: 100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div>
+        <h2>ReVibe Market</h2>
+        <p>Discover Great Deals. Give Every Product a New Home!</p>
+    </div>
+
+    <button id="logoutBtn" class="hidden" onclick="logout()">Logout</button>
+</header>
+
+<div class="container">
+
+<!-- LOGIN AND REGISTER -->
+
+<div id="authPage" class="box center">
+
+    <h2>Login to ReVibe Market</h2>
+
+    <form onsubmit="login(event)">
+        <input type="email" id="loginEmail" placeholder="Email Address" required>
+        <input type="password" id="loginPassword" placeholder="Password" required>
+        <button type="submit">Login</button>
+    </form>
+
+    <hr>
+
+    <h3>Register New Account</h3>
+
+    <form onsubmit="register(event)">
+
+        <input type="text" id="regName" placeholder="Full Name" required>
+
+        <input type="email" id="regEmail" placeholder="Email Address" required>
+
+        <input type="password" id="regPassword" placeholder="Password" required>
+
+        <select id="regRole" required>
+            <option value="">Select Role</option>
+            <option value="Seller">Seller</option>
+            <option value="Buyer">Buyer</option>
+        </select>
+
+        <button type="submit" class="green">Register</button>
+    </form>
+
+    <hr>
+
+    <p><b>Admin Login</b></p>
+    <p class="small">Email: admin@revibemarket.com</p>
+    <p class="small">Password: Admin@123</p>
+
+</div>
+
+
+<!-- ADMIN DASHBOARD -->
+
+<div id="adminPage" class="hidden">
+
+    <div class="box">
+        <h2>Admin Dashboard</h2>
+        <p>Welcome, Admin!</p>
+
+        <h3>Pending Products</h3>
+        <div id="pendingProducts"></div>
+    </div>
+
+    <div class="box">
+        <h3>All Products</h3>
+        <div id="adminAllProducts"></div>
+    </div>
+
+</div>
+
+
+<!-- SELLER DASHBOARD -->
+
+<div id="sellerPage" class="hidden">
+
+    <div class="box">
+        <h2>Seller Dashboard</h2>
+        <p id="sellerWelcome"></p>
+    </div>
+
+    <div class="box">
+
+        <h3>Upload Your Product</h3>
+
+        <form onsubmit="addProduct(event)">
+
+            <input type="text" id="productName"
+            placeholder="Product Name" required>
+
+            <textarea id="productDescription"
+            placeholder="Product Description" required></textarea>
+
+            <label>Product Image</label>
+
+            <input type="file" id="productImage"
+            accept="image/*" required>
+
+            <input type="number" id="expectedPrice"
+            placeholder="Your Expected Price (₹)"
+            min="1" required>
+
+            <input type="number" id="productQuantity"
+            placeholder="Quantity" min="1" required>
+
+            <button type="submit" class="green">
+                Upload Product
+            </button>
+
+        </form>
+
+    </div>
+
+    <div class="box">
+        <h3>My Products</h3>
+        <div id="sellerProducts" class="product-grid"></div>
+    </div>
+
+    <div class="box">
+        <h3>My Order Requests</h3>
+        <div id="sellerOrders"></div>
+    </div>
+
+</div>
+
+
+<!-- BUYER DASHBOARD -->
+
+<div id="buyerPage" class="hidden">
+
+    <div class="box">
+        <h2>Buyer Dashboard</h2>
+        <p id="buyerWelcome"></p>
+    </div>
+
+    <div class="box">
+
+        <h3>Available Products</h3>
+
+        <input type="text" id="searchBox"
+        placeholder="Search Products..."
+        oninput="showProducts()">
+
+        <div id="buyerProducts" class="product-grid"></div>
+
+    </div>
+
+    <div class="box">
+        <h3>My Orders</h3>
+        <div id="buyerOrders"></div>
+    </div>
+
+</div>
+
+
+<!-- CHECKOUT PAGE -->
+
+<div id="checkoutPage" class="hidden">
+
+    <div class="box">
+
+        <button class="back-btn" onclick="backToBuyer()">
+            ← Back to Products
+        </button>
+
+        <h2>Checkout</h2>
+
+        <p>Enter your delivery details to place your order.</p>
+
+        <hr>
+
+        <div id="checkoutProduct"></div>
+
+    </div>
+
+    <div class="box">
+
+        <h3>Delivery Details</h3>
+
+        <form id="checkoutForm" onsubmit="placeOrder(event)">
+
+            <label>Full Name</label>
+            <input type="text" id="buyerName"
+            placeholder="Enter Your Name" required>
+
+            <label>Mobile Number</label>
+            <input type="tel" id="buyerMobile"
+            placeholder="Enter Mobile Number"
+            pattern="[0-9]{10}" maxlength="10" required>
+
+            <label>Email Address</label>
+            <input type="email" id="buyerEmail"
+            placeholder="Enter Email" required>
+
+            <label>City</label>
+            <input type="text" id="buyerCity"
+            placeholder="Enter City" required>
+
+            <label>Delivery Address</label>
+            <textarea id="buyerAddress"
+            placeholder="Enter Full Delivery Address"
+            required></textarea>
+
+            <label>PIN Code</label>
+            <input type="text" id="buyerPin"
+            placeholder="Enter PIN Code"
+            pattern="[0-9]{6}" maxlength="6" required>
+
+            <label>Quantity</label>
+            <input type="number" id="buyQuantity"
+            min="1" value="1" required
+            oninput="updateCheckoutTotal()">
+
+            <div class="total" id="checkoutTotal"></div>
+
+            <hr>
+
+            <h3>Payment Method</h3>
+
+            <div class="payment-option">
+
+                <label>
+                    <input type="radio"
+                    name="paymentMethod"
+                    value="COD"
+                    checked
+                    onchange="toggleUPI()">
+
+                    Cash on Delivery (COD)
+                </label>
+
+                <p class="small">
+                    Pay when your product is delivered.
+                </p>
+
+            </div>
+
+            <div class="payment-option">
+
+                <label>
+                    <input type="radio"
+                    name="paymentMethod"
+                    value="UPI"
+                    onchange="toggleUPI()">
+
+                    UPI Payment
+                </label>
+
+                <p class="small">
+                    Select UPI as your payment method.
+                </p>
+
+            </div>
+
+            <div id="upiSection" class="hidden">
+
+                <label>UPI ID</label>
+
+                <input type="text" id="upiId"
+                placeholder="Example: name@upi">
+
+                <p class="small">
+                    Demo only. Actual UPI payment is not processed.
+                    Never enter your UPI PIN here.
+                </p>
+
+            </div>
+
+            <button type="submit" class="green">
+                Place Order
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<script>
+
+// STORAGE FUNCTIONS
+
+function getData(key) {
+    return JSON.parse(localStorage.getItem(key) || "[]");
+}
+
+function saveData(key, data) {
+    localStorage.setItem(key, JSON.stringify(data));
+}
+
+
+// CURRENT USER
+
+let currentUser = null;
+let selectedProductId = null;
+
+
+// FIXED ADMIN
+
+const ADMIN_EMAIL = "admin@revibemarket.com";
+const ADMIN_PASSWORD = "Admin@123";
+
+
+// SAFE TEXT
+
+function safe(value) {
+    return String(value ?? "").replace(/[&<>"']/g, function(c) {
+        return {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+        }[c];
+    });
+}
+
+
+// PAGE DISPLAY
+
+function hideAllPages() {
+
+    document.getElementById("authPage").classList.add("hidden");
+    document.getElementById("adminPage").classList.add("hidden");
+    document.getElementById("sellerPage").classList.add("hidden");
+    document.getElementById("buyerPage").classList.add("hidden");
+    document.getElementById("checkoutPage").classList.add("hidden");
+
+}
+
+
+function openDashboard() {
+
+    hideAllPages();
+
+    document.getElementById("logoutBtn").classList.remove("hidden");
+
+    if (currentUser.role === "Admin") {
+
+        document.getElementById("adminPage").classList.remove("hidden");
+        showAdmin();
+
+    }
+
+    if (currentUser.role === "Seller") {
+
+        document.getElementById("sellerPage").classList.remove("hidden");
+
+        document.getElementById("sellerWelcome").innerText =
+        "Welcome, " + currentUser.name;
+
+        showSeller();
+
+    }
+
+    if (currentUser.role === "Buyer") {
+
+        document.getElementById("buyerPage").classList.remove("hidden");
+
+        document.getElementById("buyerWelcome").innerText =
+        "Welcome, " + currentUser.name;
+
+        showProducts();
+        showBuyerOrders();
+
+    }
+
+}
+
+
+// REGISTER
+
+function register(e) {
+
+    e.preventDefault();
+
+    let name = document.getElementById("regName").value.trim();
+    let email = document.getElementById("regEmail").value.trim().toLowerCase();
+    let password = document.getElementById("regPassword").value;
+    let role = document.getElementById("regRole").value;
+
+    if (email === ADMIN_EMAIL) {
+        alert("This email is reserved for Admin.");
+        return;
+    }
+
+    let users = getData("users");
+
+    if (users.some(u => u.email === email)) {
+        alert("Email already registered!");
+        return;
+    }
+
+    users.push({
+        name: name,
+        email: email,
+        password: password,
+        role: role
+    });
+
+    saveData("users", users);
+
+    alert("Registration Successful! Please Login.");
+
+    e.target.reset();
+
+}
+
+
+// LOGIN
+
+function login(e) {
+
+    e.preventDefault();
+
+    let email = document.getElementById("loginEmail").value.trim().toLowerCase();
+    let password = document.getElementById("loginPassword").value;
+
+    if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+
+        currentUser = {
+            name: "Admin",
+            email: ADMIN_EMAIL,
+            role: "Admin"
+        };
+
+        openDashboard();
+        return;
+
+    }
+
+    let users = getData("users");
+
+    let user = users.find(u =>
+        u.email === email &&
+        u.password === password
+    );
+
+    if (!user) {
+        alert("Invalid Email or Password!");
+        return;
+    }
+
+    currentUser = user;
+
+    openDashboard();
+
+}
+
+
+// LOGOUT
+
+function logout() {
+
+    currentUser = null;
+
+    hideAllPages();
+
+    document.getElementById("authPage").classList.remove("hidden");
+
+    document.getElementById("logoutBtn").classList.add("hidden");
+
+    document.getElementById("loginEmail").value = "";
+    document.getElementById("loginPassword").value = "";
+
+}
+
+
+// IMAGE READER
+
+function readImage(file) {
+
+    return new Promise((resolve, reject) => {
+
+        let reader = new FileReader();
+
+        reader.onload = () => resolve(reader.result);
+
+        reader.onerror = () => reject(new Error("Image read failed"));
+
+        reader.readAsDataURL(file);
+
+    });
+
+}
+
+
+// SELLER UPLOAD PRODUCT
+
+async function addProduct(e) {
+
+    e.preventDefault();
+
+    let file = document.getElementById("productImage").files[0];
+
+    if (!file || !file.type.startsWith("image/")) {
+        alert("Please select a valid product image.");
+        return;
+    }
+
+    try {
+
+        let image = await readImage(file);
+
+        let products = getData("products");
+
+        let product = {
+
+            id: Date.now().toString() + Math.random().toString(16).slice(2),
+
+            sellerEmail: currentUser.email,
+            sellerName: currentUser.name,
+
+            name: document.getElementById("productName").value.trim(),
+
+            description: document.getElementById("productDescription").value.trim(),
+
+            image: image,
+
+            expectedPrice: Number(document.getElementById("expectedPrice").value),
+
+            adminPrice: 0,
+
+            quantity: Number(document.getElementById("productQuantity").value),
+
+            status: "Pending"
+
+        };
+
+        if (product.expectedPrice <= 0 || product.quantity <= 0) {
+            alert("Enter valid price and quantity.");
+            return;
+        }
+
+        products.push(product);
+
+        saveData("products", products);
+
+        alert("Product uploaded! Waiting for Admin approval.");
+
+        e.target.reset();
+
+        showSeller();
+
+    } catch (error) {
+
+        alert("Image upload failed.");
+
+    }
+
+}
+
+
+// ADMIN DASHBOARD
+
+function showAdmin() {
+
+    let products = getData("products");
+
+    products.forEach(p => {
+
+        if (!p.status) p.status = "Pending";
+
+        if (p.expectedPrice === undefined) {
+            p.expectedPrice = Number(p.price) || 0;
+        }
+
+        if (p.adminPrice === undefined) {
+            p.adminPrice = 0;
+        }
+
+    });
+
+    saveData("products", products);
+
+    let pending = products.filter(p => p.status === "Pending");
+
+    let html = "";
+
+    if (pending.length === 0) {
+        html = "<p>No pending products available.</p>";
+    }
+
+    pending.forEach(p => {
+
+        html += `
+
+        <div class="product-card" style="margin-bottom:15px;">
+
+            <img src="${p.image}" alt="Product image">
+
+            <h3>${safe(p.name)}</h3>
+
+            <p>${safe(p.description)}</p>
+
+            <p>Seller: ${safe(p.sellerName)}</p>
+
+            <p>Expected Price: ₹${Number(p.expectedPrice)}</p>
+
+            <p>Quantity: ${Number(p.quantity)}</p>
+
+            <label>Admin Final Price</label>
+
+            <input type="number"
+            id="price_${safe(p.id)}"
+            min="1"
+            placeholder="Enter Final Price">
+
+            <button class="green"
+            onclick="approveProduct('${safe(p.id)}')">
+                Approve
+            </button>
+
+            <button class="red"
+            onclick="rejectProduct('${safe(p.id)}')">
+                Reject
+            </button>
+
+        </div>`;
+
+    });
+
+    document.getElementById("pendingProducts").innerHTML = html;
+
+
+    let allHTML = "";
+
+    if (products.length === 0) {
+        allHTML = "<p>No products uploaded yet.</p>";
+    }
+
+    products.forEach(p => {
+
+        allHTML += `
+
+        <div class="box">
+
+            <h3>${safe(p.name)}</h3>
+
+            <p>Seller: ${safe(p.sellerName)}</p>
+
+            <p>Expected Price: ₹${Number(p.expectedPrice || 0)}</p>
+
+            <p>Admin Price: ₹${Number(p.adminPrice || 0)}</p>
+
+            <p>Status: <span class="status">${safe(p.status)}</span></p>
+
+        </div>`;
+
+    });
+
+    document.getElementById("adminAllProducts").innerHTML = allHTML;
+
+}
+
+
+// ADMIN APPROVE
+
+function approveProduct(id) {
+
+    let products = getData("products");
+
+    let product = products.find(p => p.id === id);
+
+    if (!product) return;
+
+    let price = Number(document.getElementById("price_" + id).value);
+
+    if (!price || price <= 0) {
+        alert("Enter a valid final selling price.");
+        return;
+    }
+
+    product.adminPrice = price;
+
+    product.status = "Approved";
+
+    saveData("products", products);
+
+    alert("Product Approved Successfully!");
+
+    showAdmin();
+
+}
+
+
+// ADMIN REJECT
+
+function rejectProduct(id) {
+
+    if (!confirm("Reject this product?")) return;
+
+    let products = getData("products");
+
+    let product = products.find(p => p.id === id);
+
+    if (product) {
+
+        product.status = "Rejected";
+
+        saveData("products", products);
+
+    }
+
+    alert("Product Rejected.");
+
+    showAdmin();
+
+}
+
+
+// SELLER DASHBOARD
+
+function showSeller() {
+
+    let products = getData("products");
+
+    let myProducts = products.filter(p =>
+        p.sellerEmail === currentUser.email
+    );
+
+    let html = "";
+
+    if (myProducts.length === 0) {
+        html = "<p>You have not uploaded any products.</p>";
+    }
+
+    myProducts.forEach(p => {
+
+        html += `
+
+        <div class="product-card">
+
+            <img src="${p.image}" alt="Product image">
+
+            <h3>${safe(p.name)}</h3>
+
+            <p>${safe(p.description)}</p>
+
+            <p>Expected Price: ₹${Number(p.expectedPrice || 0)}</p>
+
+            <p>Admin Price: ₹${Number(p.adminPrice || 0)}</p>
+
+            <p>Quantity: ${Number(p.quantity) || 0}</p>
+
+            <p>Status:
+            <span class="status">${safe(p.status || "Pending")}</span>
+            </p>
+
+            <button class="red"
+            onclick="deleteProduct('${safe(p.id)}')">
+                Delete
+            </button>
+
+        </div>`;
+
+    });
+
+    document.getElementById("sellerProducts").innerHTML = html;
+
+    showSellerOrders();
+
+}
+
+
+// SELLER DELETE PRODUCT
+
+function deleteProduct(id) {
+
+    if (!confirm("Delete this product?")) return;
+
+    let products = getData("products");
+
+    products = products.filter(p =>
+        !(p.id === id && p.sellerEmail === currentUser.email)
+    );
+
+    saveData("products", products);
+
+    showSeller();
+
+}
+
+
+// BUYER PRODUCTS
+
+function showProducts() {
+
+    let products = getData("products");
+
+    let search = document.getElementById("searchBox").value.toLowerCase();
+
+    let available = products.filter(p =>
+
+        p.status === "Approved" &&
+
+        Number(p.quantity) > 0 &&
+
+        (
+
+            p.name.toLowerCase().includes(search) ||
+
+            p.description.toLowerCase().includes(search)
+
+        )
+
+    );
+
+    let html = "";
+
+    if (available.length === 0) {
+        html = "<p>No products available.</p>";
+    }
+
+    available.forEach(p => {
+
+        html += `
+
+        <div class="product-card">
+
+            <img src="${p.image}" alt="Product image">
+
+            <h3>${safe(p.name)}</h3>
+
+            <p>${safe(p.description)}</p>
+
+            <p class="small">Seller: ${safe(p.sellerName)}</p>
+
+            <p class="price">₹${Number(p.adminPrice)}</p>
+
+            <p>Available Quantity: ${Number(p.quantity)}</p>
+
+            <button onclick="openCheckout('${safe(p.id)}')">
+                Buy Now
+            </button>
+
+        </div>`;
+
+    });
+
+    document.getElementById("buyerProducts").innerHTML = html;
+
+}
+
+
+// OPEN CHECKOUT PAGE
+
+function openCheckout(id) {
+
+    let products = getData("products");
+
+    let product = products.find(p =>
+        p.id === id &&
+        p.status === "Approved" &&
+        Number(p.quantity) > 0
+    );
+
+    if (!product) {
+
+        alert("Product is not available.");
+
+        showProducts();
+
+        return;
+
+    }
+
+    selectedProductId = id;
+
+    hideAllPages();
+
+    document.getElementById("checkoutPage").classList.remove("hidden");
+
+    document.getElementById("checkoutProduct").innerHTML = `
+
+        <div class="checkout-product">
+
+            <img src="${product.image}" alt="Product image">
+
+            <div>
+
+                <h3>${safe(product.name)}</h3>
+
+                <p>${safe(product.description)}</p>
+
+                <p>Seller: ${safe(product.sellerName)}</p>
+
+                <p class="price">₹${Number(product.adminPrice)}</p>
+
+                <p>Available Quantity: ${Number(product.quantity)}</p>
+
+            </div>
+
+        </div>`;
+
+    document.getElementById("buyerName").value = currentUser.name;
+
+    document.getElementById("buyerEmail").value = currentUser.email;
+
+    document.getElementById("buyQuantity").value = 1;
+
+    document.getElementById("buyQuantity").max = product.quantity;
+
+    document.getElementById("checkoutForm").reset();
+
+    document.getElementById("buyerName").value = currentUser.name;
+
+    document.getElementById("buyerEmail").value = currentUser.email;
+
+    document.getElementById("buyQuantity").value = 1;
+
+    document.getElementById("buyQuantity").max = product.quantity;
+
+    document.querySelector('input[name="paymentMethod"][value="COD"]').checked = true;
+
+    toggleUPI();
+
+    updateCheckoutTotal();
+
+}
+
+
+// UPDATE TOTAL AMOUNT
+
+function updateCheckoutTotal() {
+
+    let products = getData("products");
+
+    let product = products.find(p => p.id === selectedProductId);
+
+    if (!product) return;
+
+    let quantity = Number(document.getElementById("buyQuantity").value);
+
+    if (!Number.isInteger(quantity) || quantity < 1) {
+        quantity = 1;
+    }
+
+    let total = Number(product.adminPrice) * quantity;
+
+    document.getElementById("checkoutTotal").innerText =
+        "Total Amount: ₹" + total;
+
+}
+
+
+// PAYMENT METHOD
+
+function toggleUPI() {
+
+    let payment = document.querySelector(
+        'input[name="paymentMethod"]:checked'
+    ).value;
+
+    let upiSection = document.getElementById("upiSection");
+
+    let upiInput = document.getElementById("upiId");
+
+    if (payment === "UPI") {
+
+        upiSection.classList.remove("hidden");
+
+        upiInput.required = true;
+
+    } else {
+
+        upiSection.classList.add("hidden");
+
+        upiInput.required = false;
+
+        upiInput.value = "";
+
+    }
+
+}
+
+
+// PLACE ORDER
+
+function placeOrder(e) {
+
+    e.preventDefault();
+
+    let products = getData("products");
+
+    let product = products.find(p =>
+        p.id === selectedProductId &&
+        p.status === "Approved"
+    );
+
+    if (!product || Number(product.quantity) <= 0) {
+
+        alert("Sorry! Product is not available.");
+
+        backToBuyer();
+
+        return;
+
+    }
+
+    let quantity = Number(document.getElementById("buyQuantity").value);
+
+    if (!Number.isInteger(quantity) ||
+        quantity <= 0 ||
+        quantity > Number(product.quantity)) {
+
+        alert("Please enter a valid available quantity.");
+
+        return;
+
+    }
+
+    let payment = document.querySelector(
+        'input[name="paymentMethod"]:checked'
+    ).value;
+
+    let upiId = "";
+
+    if (payment === "UPI") {
+
+        upiId = document.getElementById("upiId").value.trim();
+
+        if (!upiId) {
+
+            alert("Please enter your UPI ID.");
+
+            return;
+
+        }
+
+        if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9]+$/.test(upiId)) {
+
+            alert("Please enter a valid UPI ID.");
+
+            return;
+
+        }
+
+    }
+
+    let order = {
+
+        id: Date.now().toString() + Math.random().toString(16).slice(2),
+
+        productId: product.id,
+
+        productName: product.name,
+
+        sellerEmail: product.sellerEmail,
+
+        sellerName: product.sellerName,
+
+        buyerEmail: currentUser.email,
+
+        buyerName: document.getElementById("buyerName").value.trim(),
+
+        mobile: document.getElementById("buyerMobile").value.trim(),
+
+        email: document.getElementById("buyerEmail").value.trim(),
+
+        city: document.getElementById("buyerCity").value.trim(),
+
+        address: document.getElementById("buyerAddress").value.trim(),
+
+        pin: document.getElementById("buyerPin").value.trim(),
+
+        quantity: quantity,
+
+        total: Number(product.adminPrice) * quantity,
+
+        payment: payment,
+
+        upiId: upiId,
+
+        status: "Pending"
+
+    };
+
+    let orders = getData("orders");
+
+    orders.push(order);
+
+    saveData("orders", orders);
+
+    alert("Your Order Placed Successfully!");
+
+    selectedProductId = null;
+
+    hideAllPages();
+
+    document.getElementById("buyerPage").classList.remove("hidden");
+
+    showProducts();
+
+    showBuyerOrders();
+
+}
+
+
+// BACK TO BUYER PAGE
+
+function backToBuyer() {
+
+    selectedProductId = null;
+
+    hideAllPages();
+
+    document.getElementById("buyerPage").classList.remove("hidden");
+
+    showProducts();
+
+    showBuyerOrders();
+
+}
+
+
+// SELLER ORDERS
+
+function showSellerOrders() {
+
+    let orders = getData("orders");
+
+    let myOrders = orders.filter(o =>
+        o.sellerEmail === currentUser.email
+    );
+
+    let html = "";
+
+    if (myOrders.length === 0) {
+        html = "<p>No orders received.</p>";
+    }
+
+    myOrders.forEach(o => {
+
+        html += `
+
+        <div class="box">
+
+            <h3>${safe(o.productName)}</h3>
+
+            <p>Buyer: ${safe(o.buyerName)}</p>
+
+            <p>Mobile: ${safe(o.mobile)}</p>
+
+            <p>Email: ${safe(o.email)}</p>
+
+            <p>City: ${safe(o.city)}</p>
+
+            <p>Address: ${safe(o.address)}</p>
+
+            <p>PIN: ${safe(o.pin)}</p>
+
+            <p>Quantity: ${Number(o.quantity)}</p>
+
+            <p>Total: ₹${Number(o.total)}</p>
+
+            <p>Payment Method: ${safe(o.payment)}</p>
+
+            ${o.payment === "UPI" ?
+                `<p>UPI ID: ${safe(o.upiId)}</p>` : ""
+            }
+
+            <p>Status:
+            <span class="status">${safe(o.status)}</span>
+            </p>
+
+            ${
+                o.status === "Pending"
+                ? `
+
+                <button class="green"
+                onclick="acceptOrder('${safe(o.id)}')">
+                    Accept Order
+                </button>
+
+                <button class="red"
+                onclick="rejectOrder('${safe(o.id)}')">
+                    Reject Order
+                </button>
+
+                `
+                : ""
+            }
+
+        </div>`;
+
+    });
+
+    document.getElementById("sellerOrders").innerHTML = html;
+
+}
+
+
+// ACCEPT ORDER
+
+function acceptOrder(id) {
+
+    let orders = getData("orders");
+
+    let products = getData("products");
+
+    let order = orders.find(o =>
+        o.id === id &&
+        o.sellerEmail === currentUser.email
+    );
+
+    if (!order || order.status !== "Pending") return;
+
+    let product = products.find(p =>
+        p.id === order.productId &&
+        p.sellerEmail === currentUser.email
+    );
+
+    if (!product || Number(product.quantity) < Number(order.quantity)) {
+
+        alert("Insufficient stock. Order cannot be accepted.");
+
+        return;
+
+    }
+
+    product.quantity =
+        Number(product.quantity) - Number(order.quantity);
+
+    order.status = "Accepted";
+
+    saveData("products", products);
+
+    saveData("orders", orders);
+
+    alert("Order Accepted Successfully!");
+
+    showSeller();
+
+}
+
+
+// REJECT ORDER
+
+function rejectOrder(id) {
+
+    let orders = getData("orders");
+
+    let order = orders.find(o =>
+        o.id === id &&
+        o.sellerEmail === currentUser.email
+    );
+
+    if (!order || order.status !== "Pending") return;
+
+    order.status = "Rejected";
+
+    saveData("orders", orders);
+
+    alert("Order Rejected.");
+
+    showSellerOrders();
+
+}
+
+
+// BUYER ORDER STATUS
+
+function showBuyerOrders() {
+
+    let orders = getData("orders");
+
+    let myOrders = orders.filter(o =>
+        o.buyerEmail === currentUser.email
+    );
+
+    let html = "";
+
+    if (myOrders.length === 0) {
+        html = "<p>You have not placed any orders.</p>";
+    }
+
+    myOrders.forEach(o => {
+
+        html += `
+
+        <div class="box">
+
+            <h3>${safe(o.productName)}</h3>
+
+            <p>Seller: ${safe(o.sellerName)}</p>
+
+            <p>Quantity: ${Number(o.quantity)}</p>
+
+            <p>Total: ₹${Number(o.total)}</p>
+
+            <p>Payment: ${safe(o.payment)}</p>
+
+            <p>Order Status:
+            <span class="status">${safe(o.status)}</span>
+            </p>
+
+        </div>`;
+
+    });
+
+    document.getElementById("buyerOrders").innerHTML = html;
+
+}
+
+
+// INITIAL PAGE
+
+hideAllPages();
+
+document.getElementById("authPage").classList.remove("hidden");
+
+</script>
+
+</body>
+</html>
